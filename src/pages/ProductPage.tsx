@@ -6,7 +6,7 @@ import { Layout } from '@/components/layout/Layout';
 import { ProductCard } from '@/components/common/ProductCard';
 import { getProductBySlug, products, formatPrice } from '@/data/products';
 import { useCart } from '@/contexts/CartContext';
-import { toast } from 'sonner';
+
 
 export default function ProductPage() {
   const { slug } = useParams<{ slug: string }>();
@@ -36,7 +36,6 @@ export default function ProductPage() {
   const handleAddToCart = () => {
     if (!product.inStock) return;
     addToCart(product, quantity);
-    toast.success(`${product.name} added to cart`);
   };
 
   return (

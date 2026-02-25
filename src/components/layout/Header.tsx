@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Search, ShoppingBag, Heart, User, Menu, X } from 'lucide-react';
 import { useCart } from '@/contexts/CartContext';
+import { CartDrawer } from '@/components/common/CartDrawer';
 import { SearchBar } from '@/components/common/SearchBar';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -16,7 +17,7 @@ const navLinks = [
 export function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
-  const { cartCount, wishlist } = useCart();
+  const { cartCount, wishlist, drawerOpen, setDrawerOpen } = useCart();
   const location = useLocation();
 
   return (
@@ -84,8 +85,8 @@ export function Header() {
               <Link to="/account" className="p-2 text-foreground hover:text-muted-foreground transition-colors hidden sm:block" aria-label="Account">
                 <User size={18} />
               </Link>
-              <Link
-                to="/cart"
+              <button
+                onClick={() => setDrawerOpen(true)}
                 className="p-2 text-foreground hover:text-muted-foreground transition-colors relative"
                 aria-label="Cart"
               >
@@ -95,7 +96,7 @@ export function Header() {
                     {cartCount}
                   </span>
                 )}
-              </Link>
+              </button>
             </div>
           </div>
         </div>
@@ -167,6 +168,9 @@ export function Header() {
           </>
         )}
       </AnimatePresence>
+
+      {/* Cart Drawer */}
+      <CartDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} />
     </>
   );
 }
