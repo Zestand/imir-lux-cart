@@ -19,6 +19,8 @@ interface CartContextType {
   subtotal: number;
   deliveryCost: number;
   total: number;
+  drawerOpen: boolean;
+  setDrawerOpen: (open: boolean) => void;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -35,6 +37,7 @@ function loadFromStorage<T>(key: string, fallback: T): T {
 export function CartProvider({ children }: { children: React.ReactNode }) {
   const [items, setItems] = useState<CartItem[]>(() => loadFromStorage('imir-cart', []));
   const [wishlist, setWishlist] = useState<string[]>(() => loadFromStorage('imir-wishlist', []));
+  const [drawerOpen, setDrawerOpen] = useState(false);
 
   useEffect(() => {
     localStorage.setItem('imir-cart', JSON.stringify(items));
@@ -56,6 +59,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       }
       return [...prev, { product, quantity }];
     });
+    setDrawerOpen(true);
   }, []);
 
   const removeFromCart = useCallback((productId: string) => {
@@ -97,7 +101,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       value={{
         items, wishlist, addToCart, removeFromCart, updateQuantity,
         clearCart, toggleWishlist, isInWishlist, cartCount,
-        subtotal, deliveryCost, total,
+        subtotal, deliveryCost, total, drawerOpen, setDrawerOpen,
       }}
     >
       {children}
